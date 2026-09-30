@@ -1,5 +1,52 @@
 import { useEffect, useState } from 'react'
-import { hiddenHoldsCase, projects } from '../data.js'
+import { caseStudies, projects } from '../data.js'
+
+function CaseArtTile({ image, onOpen }) {
+  return (
+    <figure className="art-tile">
+      <button type="button" onClick={() => onOpen(image)}>
+        <img src={image.src} alt={image.alt} />
+      </button>
+    </figure>
+  )
+}
+
+function CaseArtPair({ main, side, onOpen }) {
+  return (
+    <div className="case-pair">
+      <figure className="art-tile art-tile--hero">
+        <button type="button" onClick={() => onOpen(main)}>
+          <img src={main.src} alt={main.alt} />
+        </button>
+      </figure>
+      <figure className="art-tile art-tile--cover">
+        <button type="button" onClick={() => onOpen(side)}>
+          <img src={side.src} alt={side.alt} />
+        </button>
+      </figure>
+    </div>
+  )
+}
+
+function CaseArtGrid({ images, onOpen, soloHero = false }) {
+  if (!images.length) return null
+  if (soloHero && images.length === 1) {
+    return (
+      <figure className="art-tile art-tile--hero">
+        <button type="button" onClick={() => onOpen(images[0])}>
+          <img src={images[0].src} alt={images[0].alt} />
+        </button>
+      </figure>
+    )
+  }
+  return (
+    <div className="art-grid">
+      {images.map((image) => (
+        <CaseArtTile key={image.caption || image.src} image={image} onOpen={onOpen} />
+      ))}
+    </div>
+  )
+}
 
 function ZoomableFigure({ image, onOpen, className = '', enlarge = false }) {
   return (
@@ -18,7 +65,7 @@ function ZoomableFigure({ image, onOpen, className = '', enlarge = false }) {
   )
 }
 
-function Lightbox({ image, onClose }) {
+function Lightbox({ image, onClose, art = false }) {
   useEffect(() => {
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -34,7 +81,7 @@ function Lightbox({ image, onClose }) {
 
   return (
     <div
-      className="lightbox"
+      className={`lightbox${art ? ' lightbox--art' : ''}`}
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
@@ -61,18 +108,26 @@ function MethodsFlow({ methods }) {
   )
 }
 
-export default function CaseStudy({ onBack }) {
-  const hero = projects.find((project) => project.id === 'hidden-holds')
-  const study = hiddenHoldsCase
+export default function CaseStudy({ projectId = 'hidden-holds', onBack }) {
+  const hero = projects.find((project) => project.id === projectId) || projects[0]
+  const study = caseStudies[projectId] || caseStudies['hidden-holds']
   const [discover, define, develop, deliver] = study.phases
   const [activeImage, setActiveImage] = useState(null)
+  const nextProject = projects[projects.findIndex((project) => project.id === projectId) + 1]
+  const discoverImages = discover.images || []
+  const defineImages = define.images || []
+  const developImages = develop.images || []
+  const developLofi = develop.lofi || []
+  const developDoodle = develop.doodle
+  const deliverScreens = deliver.screens || []
+  const tileGallery = study.imageGallery === 'tiles'
 
   return (
     <article className="case">
       <div className="case-shell">
         <header className="case-top">
           <div className="case-intro">
-            <p className="kicker">{study.kicker}</p>
+            {study.kicker && <p className="kicker">{study.kicker}</p>}
             <h1 className="display">{study.title}</h1>
             <p className="case-summary">{study.summary}</p>
             <div className="case-facts">
@@ -86,20 +141,26 @@ export default function CaseStudy({ onBack }) {
           </div>
 
           <div className="case-aside">
-            <div className="case-hex">
+            <div className="case-hex" style={{ '--cell': hero.accent }}>
               <div className="case-hex__forest" />
               <div className="case-hex__photo">
-                <img src={hero.image} alt="Indoor bouldering wall at Hidden Holds Aarhus" />
+                <img src={hero.image} alt="" />
               </div>
             </div>
-            <div className="case-hex-actions">
-              <a href={study.liveUrl} target="_blank" rel="noreferrer">
-                Live project
-              </a>
-              <a href={study.figmaUrl} target="_blank" rel="noreferrer">
-                Open Figma
-              </a>
-            </div>
+            {(study.liveUrl || study.figmaUrl) && (
+              <div className="case-hex-actions">
+                {study.liveUrl && (
+                  <a href={study.liveUrl} target="_blank" rel="noreferrer">
+                    Live project
+                  </a>
+                )}
+                {study.figmaUrl && (
+                  <a href={study.figmaUrl} target="_blank" rel="noreferrer">
+                    Open Figma
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         </header>
 
@@ -117,7 +178,9 @@ export default function CaseStudy({ onBack }) {
             <span>{discover.number}</span>
             {discover.title}
           </h2>
-          <div className="phase-grid">
+          <div
+            className={`phase-grid${discoverImages.length && !tileGallery ? '' : ' phase-grid--solo'}`}
+          >
             <div className="phase-copy">
               <blockquote className="phase-quote">“{discover.quote}”</blockquote>
               <div className="phase-box">
@@ -128,22 +191,27 @@ export default function CaseStudy({ onBack }) {
                   ))}
                 </ol>
               </div>
-              <MethodsFlow methods={discover.methods} />
+              {discover.methods && <MethodsFlow methods={discover.methods} />}
             </div>
-            <div className="phase-mosaic">
-              {discover.images.map((image) => (
-                <ZoomableFigure
-                  key={image.caption}
-                  image={image}
-                  className={`is-${image.size}`}
-                  enlarge
-                  onOpen={setActiveImage}
-                />
-              ))}
-            </div>
+            {!tileGallery && discoverImages.length > 0 && (
+              <div className="phase-mosaic">
+                {discoverImages.map((image) => (
+                  <ZoomableFigure
+                    key={image.caption}
+                    image={image}
+                    className={`is-${image.size}`}
+                    enlarge
+                    onOpen={setActiveImage}
+                  />
+                ))}
+              </div>
+            )}
+            {tileGallery && <CaseArtGrid images={discoverImages} onOpen={setActiveImage} />}
             <div className="insight-board">
               <p className="phase-box__label">{discover.insightsTitle}</p>
-              <div className="insight-board__grid">
+              <div
+                className={`insight-board__grid${discover.insights.length > 3 ? ' is-four' : ''}`}
+              >
                 {discover.insights.map((insight) => (
                   <article className="insight-card" key={insight.title}>
                     <h3>{insight.title}</h3>
@@ -160,45 +228,51 @@ export default function CaseStudy({ onBack }) {
             <span>{define.number}</span>
             {define.title}
           </h2>
-          <div className="phase-grid phase-grid--define">
+          <div className={`phase-grid phase-grid--define${define.list ? '' : ' phase-grid--solo'}`}>
             <div className="phase-copy">
               {define.paragraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
-              <MethodsFlow methods={define.methods} />
+              {define.methods && <MethodsFlow methods={define.methods} />}
             </div>
-            <div className="phase-box">
-              <p className="phase-box__label">{define.listTitle}</p>
-              <ol>
-                {define.list.map((item) => (
-                  <li key={item.title}>
-                    <strong>{item.title}</strong>
-                    <span>{item.text}</span>
-                  </li>
+            {define.list && (
+              <div className="phase-box">
+                <p className="phase-box__label">{define.listTitle}</p>
+                <ol>
+                  {define.list.map((item) => (
+                    <li key={item.title}>
+                      <strong>{item.title}</strong>
+                      <span>{item.text}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
+          {defineImages.some((image) => image.size !== 'vpc') && (
+            <div className="phase-mosaic phase-mosaic--define">
+              {defineImages
+                .filter((image) => image.size !== 'vpc')
+                .map((image) => (
+                  <ZoomableFigure
+                    key={image.caption}
+                    image={image}
+                    className={`is-${image.size}`}
+                    enlarge
+                    onOpen={setActiveImage}
+                  />
                 ))}
-              </ol>
             </div>
-          </div>
-          <div className="phase-mosaic phase-mosaic--define">
-            {define.images
-              .filter((image) => image.size !== 'vpc')
-              .map((image) => (
-                <ZoomableFigure
-                  key={image.caption}
-                  image={image}
-                  className={`is-${image.size}`}
-                  enlarge
-                  onOpen={setActiveImage}
-                />
-              ))}
-          </div>
-          <div className="phase-mosaic phase-mosaic--vpc">
-            {define.images
-              .filter((image) => image.size === 'vpc')
-              .map((image) => (
-                <ZoomableFigure key={image.caption} image={image} enlarge onOpen={setActiveImage} />
-              ))}
-          </div>
+          )}
+          {defineImages.some((image) => image.size === 'vpc') && (
+            <div className="phase-mosaic phase-mosaic--vpc">
+              {defineImages
+                .filter((image) => image.size === 'vpc')
+                .map((image) => (
+                  <ZoomableFigure key={image.caption} image={image} enlarge onOpen={setActiveImage} />
+                ))}
+            </div>
+          )}
         </section>
 
         <section className="phase" id="develop">
@@ -206,27 +280,54 @@ export default function CaseStudy({ onBack }) {
             <span>{develop.number}</span>
             {develop.title}
           </h2>
-          <p className="phase-lead">{develop.text}</p>
-          <MethodsFlow methods={develop.methods} />
-          <div className="process-gallery process-gallery--wide">
-            {develop.images.map((image) => (
-              <ZoomableFigure
-                key={image.caption}
-                image={image}
-                className={image.size ? `is-${image.size}` : ''}
-                enlarge
-                onOpen={setActiveImage}
-              />
-            ))}
-          </div>
-          <div className="lofi-block">
-            <p className="lofi-block__label">Low-fidelity wireframes</p>
-            <div className="process-gallery process-gallery--pair">
-              {develop.lofi.map((image) => (
-                <ZoomableFigure key={image.caption} image={image} enlarge onOpen={setActiveImage} />
-              ))}
+          {develop.paragraphs ? (
+            develop.paragraphs.map((paragraph) => (
+              <p className="phase-lead" key={paragraph}>
+                {paragraph}
+              </p>
+            ))
+          ) : (
+            <p className="phase-lead">{develop.text}</p>
+          )}
+          {develop.methods && <MethodsFlow methods={develop.methods} />}
+          {tileGallery && developLofi[0] && developDoodle ? (
+            <div className="lofi-block">
+              <p className="lofi-block__label">Low-fidelity wireframes</p>
+              <CaseArtPair main={developLofi[0]} side={developDoodle} onOpen={setActiveImage} />
             </div>
-          </div>
+          ) : (
+            developLofi.length > 0 && (
+              <div className="lofi-block">
+                <p className="lofi-block__label">Low-fidelity wireframes</p>
+                {tileGallery ? (
+                  <CaseArtGrid images={developLofi} onOpen={setActiveImage} soloHero />
+                ) : (
+                  <div className="process-gallery process-gallery--pair">
+                    {developLofi.map((image) => (
+                      <ZoomableFigure key={image.caption} image={image} enlarge onOpen={setActiveImage} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          )}
+          {tileGallery ? (
+            <CaseArtGrid images={developImages} onOpen={setActiveImage} />
+          ) : (
+            developImages.length > 0 && (
+              <div className="process-gallery process-gallery--wide">
+                {developImages.map((image) => (
+                  <ZoomableFigure
+                    key={image.caption}
+                    image={image}
+                    className={image.size ? `is-${image.size}` : ''}
+                    enlarge
+                    onOpen={setActiveImage}
+                  />
+                ))}
+              </div>
+            )
+          )}
         </section>
 
         <section className="phase" id="deliver">
@@ -234,23 +335,47 @@ export default function CaseStudy({ onBack }) {
             <span>{deliver.number}</span>
             {deliver.title}
           </h2>
-          <p className="phase-lead">{deliver.text}</p>
-          <div className="solution-grid">
-            {deliver.screens.map((screen) => (
-              <ZoomableFigure key={screen.caption} image={screen} onOpen={setActiveImage} />
+          {deliver.paragraphs ? (
+            deliver.paragraphs.map((paragraph) => (
+              <p className="phase-lead" key={paragraph}>
+                {paragraph}
+              </p>
+            ))
+          ) : (
+            <p className="phase-lead">{deliver.text}</p>
+          )}
+          {deliverScreens.length > 0 &&
+            (tileGallery ? (
+              <CaseArtGrid images={deliverScreens} onOpen={setActiveImage} />
+            ) : (
+              <div className="solution-grid">
+                {deliverScreens.map((screen) => (
+                  <ZoomableFigure key={screen.caption} image={screen} onOpen={setActiveImage} />
+                ))}
+              </div>
             ))}
-          </div>
         </section>
 
         <div className="case-next">
           <div>
-            <p className="label">Next project</p>
-            <p>Blå Sol Festival</p>
+            {nextProject && (
+              <>
+                <p className="label">Next project</p>
+                <p>{nextProject.title}</p>
+              </>
+            )}
           </div>
           <div className="case-next__actions">
-            <a className="btn btn-honey" href={study.liveUrl} target="_blank" rel="noreferrer">
-              Visit live site
-            </a>
+            {study.liveUrl && (
+              <a className="btn btn-honey" href={study.liveUrl} target="_blank" rel="noreferrer">
+                Visit live site
+              </a>
+            )}
+            {!study.liveUrl && study.figmaUrl && (
+              <a className="btn btn-honey" href={study.figmaUrl} target="_blank" rel="noreferrer">
+                Open Figma
+              </a>
+            )}
             <button className="btn btn-forest" onClick={onBack}>
               ← Back to hive
             </button>
@@ -258,7 +383,13 @@ export default function CaseStudy({ onBack }) {
         </div>
       </div>
 
-      {activeImage && <Lightbox image={activeImage} onClose={() => setActiveImage(null)} />}
+      {activeImage && (
+        <Lightbox
+          image={activeImage}
+          onClose={() => setActiveImage(null)}
+          art={tileGallery}
+        />
+      )}
     </article>
   )
 }

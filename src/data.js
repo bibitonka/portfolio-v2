@@ -1,4 +1,4 @@
-import HiddenHoldsHero from './imports/hidden_holds_hero.png'
+import HiddenHoldsHero from './imports/hidden_holds_hero.jpg'
 import TattooPhoto from './imports/tattoo_shop_hero.png'
 import BlasolPhoto from './imports/bla_sol_hero.png'
 import IllustrationsPhoto from './imports/illustration_hero.png'
@@ -41,6 +41,24 @@ import HouseCreative from './imports/skills/house-creative.svg'
 import HouseCreativeFill from './imports/skills/house-creative-fill.svg'
 import HouseWeb from './imports/skills/house-web.svg'
 import HouseWebFill from './imports/skills/house-web-fill.svg'
+import TattooPhotoSign from './imports/tattoo-shop/photo-sign.jpg'
+import TattooPhotoDesk from './imports/tattoo-shop/photo-desk.jpg'
+import TattooPhotoCards from './imports/tattoo-shop/photo-cards.jpg'
+import TattooPhotoConversation from './imports/tattoo-shop/photo-conversation.jpg'
+import TattooPhotoTattooing from './imports/tattoo-shop/photo-tattooing.jpg'
+import TattooPhotoTablet from './imports/tattoo-shop/photo-tablet.jpg'
+import TattooPhotoSession from './imports/tattoo-shop/photo-session.jpg'
+import TattooTypography from './imports/tattoo-shop/typography.jpg'
+import TattooColors from './imports/tattoo-shop/colors.png'
+import TattooDoodleMobile from './imports/tattoo-shop/doodle-mobile.png'
+import TattooWireframeMobile from './imports/tattoo-shop/wireframe-mobile.png'
+import TattooHomepageDesktop from './imports/tattoo-shop/homepage-desktop.png'
+import TattooHomepageMobileTop from './imports/tattoo-shop/homepage-mobile-1.png'
+import TattooHomepageMobileLower from './imports/tattoo-shop/homepage-mobile-2.png'
+import TattooComponents from './imports/tattoo-shop/components.png'
+import TattooExterior from './imports/tattoo-shop/exterior.png'
+import TattooInterior from './imports/tattoo-shop/interior.jpg'
+import TattooMaya from './imports/tattoo-shop/maya.png'
 
 const digitalArtFiles = import.meta.glob('./digital_art/*.{png,jpg,jpeg,PNG,JPG,JPEG}', {
   eager: true,
@@ -105,14 +123,16 @@ export const projects = [
   {
     id: 'tattoo-shop',
     title: 'Tattoo Shop',
-    category: 'Visual Design · Photography · UX Research',
+    category: 'UX/UI · Visual design',
     description:
-      "Brand identity, photography direction and booking interface for an independent tattoo studio. Balancing edge with accessibility, making the studio feel both daring, welcoming and keeping it's unique atmosphere.",
-    role: 'Visual Designer & Photographer',
-    skills: ['Photography', 'Brand Identity', 'UI Design', 'Art Direction'],
+      'A 1-week design sprint focused on capturing the unique atmospheric charm, artist-client relationships, and booking dynamics of Dancy & Daughters, an Aarhus-based tattoo studio.',
+    role: 'UX/UI, Visual design',
+    skills: ['Figma', 'ClipStudioPaint', 'Adobe Lightroom'],
+    figmaUrl:
+      'https://www.figma.com/design/JDFP26gT4WLUgQn33VVdWy/Dancy---Daughters-Prototypes?node-id=577-1467',
     accent: '#36322D',
     image: TattooPhoto,
-    hasCaseStudy: false,
+    hasCaseStudy: true,
   },
   {
     id: 'digital-art',
@@ -270,7 +290,6 @@ export const hiddenHoldsCase = {
   liveUrl: 'https://bibitonka.github.io/Climbing-places/',
   figmaUrl:
     'https://www.figma.com/design/Tjez2eqBLBatxj5PcAVNha/Hidden-Holds-Aarhus?node-id=1158-1931',
-  kicker: 'Finding the overlooked',
   title: 'Hidden Holds Aarhus',
   summary:
     'A responsive website that helps international newcomers in Aarhus discover lesser-known climbing spaces, understand how they differ, and feel more confident joining the local climbing community.',
@@ -384,5 +403,141 @@ export const hiddenHoldsCase = {
       ],
     },
   ],
+}
+
+export const tattooShopCase = {
+  imageGallery: 'tiles',
+  figmaUrl:
+    'https://www.figma.com/design/JDFP26gT4WLUgQn33VVdWy/Dancy---Daughters-Prototypes?node-id=577-1467',
+  title: 'Bringing the tattoo studio experience online',
+  summary:
+    'A 1-week design sprint focused on capturing the unique atmospheric charm, artist-client relationships, and booking dynamics of Dancy & Daughters, an Aarhus-based tattoo studio.',
+  meta: [
+    { label: 'Role', value: 'UX/UI, Visual design' },
+    { label: 'Duration', value: '1 week' },
+    { label: 'Tools', value: 'Figma, ClipStudioPaint, Adobe Lightroom' },
+    { label: 'Team', value: 'Group Project' },
+    { label: 'Type', value: 'SPRINT project' },
+  ],
+  phases: [
+    {
+      id: 'discover',
+      number: '01',
+      title: 'Discover',
+      quote:
+        'How might we align Dancy & Daughters’ website experience with its intimate, welcoming studio atmosphere and simplify client communication without losing the personal touch that builds trust?',
+      listTitle: 'What We Wanted to Understand',
+      list: [
+        'What drives client decision-making when choosing a tattoo studio out of hundreds of options?',
+        'How do tattoo artists manage client expectations, consultation dynamics, and booking channels?',
+        'What role does physical atmosphere (“hygge”, safety, comfort) play in alleviating client anxiety or cold feet?',
+      ],
+      methods: [
+        'Mind Mapping',
+        'Interview Scripting',
+        'On-Site Studio Observations',
+        'Client & Artist Interviews',
+        'Empathy Mapping & User Profiling',
+      ],
+      insightsTitle: 'Key Insights',
+      insights: [
+        {
+          title: 'Atmosphere builds trust',
+          text: "Dancy & Daughters' playful 80s-inspired atmosphere, artwork and personal environment were a major part of what made the studio feel welcoming.",
+        },
+        {
+          title: 'Clients are diverse',
+          text: 'The studio attracts people across ages, professions and backgrounds, but friendliness and a non-judgemental environment were common expectations.',
+        },
+        {
+          title: 'People want direct communication',
+          text: 'Clients often discovered artists through social media or word-of-mouth and valued being able to talk directly before booking',
+        },
+        {
+          title: 'First tattoos come with questions',
+          text: 'Pricing, pain and aftercare can create uncertainty, making clear information and easy consultation important (talk to us, we don’t bite).',
+        },
+      ],
+      images: [
+        { src: TattooPhotoSign, alt: 'Dancy & Daughters heart-shaped studio sign', caption: 'Studio sign' },
+        { src: TattooPhotoDesk, alt: 'Artist at the studio desk in front of framed flash', caption: 'Front desk' },
+        { src: TattooPhotoConversation, alt: 'Conversation in the studio waiting area', caption: 'Studio visit' },
+        { src: TattooPhotoCards, alt: 'Illustrated artist cards at the front desk', caption: 'Artist cards' },
+        { src: TattooPhotoSession, alt: 'Tattoo session by the studio window', caption: 'In session' },
+        { src: TattooPhotoTablet, alt: 'Tablet showing piercing work at the front desk', caption: 'Booking desk' },
+        { src: TattooPhotoTattooing, alt: 'Close-up of tattooing in the studio', caption: 'On-site photography' },
+      ],
+    },
+    {
+      id: 'define',
+      number: '02',
+      title: 'Define',
+      paragraphs: [
+        'We were finding the balance',
+        'The research revealed a clear tension: the website needed to make booking and communication easier, but without turning a highly personal experience into a cold, automated transaction.',
+      ],
+      listTitle: 'The design therefore needed to',
+      list: [
+        {
+          title: 'Preserve the personality',
+          text: "Reflect the studio's distinctive atmosphere rather than replacing it with a generic tattoo aesthetic.",
+        },
+        {
+          title: 'Build trust',
+          text: 'Give potential clients enough information to feel comfortable reaching out.',
+        },
+        {
+          title: 'Make communication easy',
+          text: 'Create clear entry points for consultation without overcomplicating the booking process.',
+        },
+      ],
+    },
+    {
+      id: 'develop',
+      number: '03',
+      title: 'Develop',
+      paragraphs: [
+        "With only one week, there wasn't time to endlessly explore. We had to make decisions quickly and let the studio itself guide the visual direction.",
+        'I visited Dancy & Daughters in person and photographed the space, capturing the details that made the studio feel like itself - the artwork, materials, lighting and atmosphere.',
+        "Since strictly preserving the existing visual identity wasn't a requirement, we experimented with the visual direction while keeping the personality of the studio at its core.",
+      ],
+      images: [
+        { src: TattooTypography, alt: 'Typography board with Miltonian, Alegreya SC and Montserrat', caption: 'Typography' },
+        { src: TattooColors, alt: 'Colour palette with ecru, licorice, seasalt, midnight green and redwood', caption: 'Colors' },
+      ],
+      doodle: {
+        src: TattooDoodleMobile,
+        alt: 'Repeating doodle pattern for mobile',
+        caption: 'Background doodles',
+      },
+      lofi: [
+        { src: TattooWireframeMobile, alt: 'Hand-drawn mobile wireframe of the homepage and gallery', caption: 'Mobile wireframe' },
+      ],
+    },
+    {
+      id: 'deliver',
+      number: '04',
+      title: 'Deliver',
+      paragraphs: [
+        'The final prototype brings the warmth and personality of Dancy & Daughters into a digital experience.',
+        'Authentic photography, photos of real-made tattoos and clear consultation entry points help potential clients understand the studio before reaching out, while keeping the experience personal rather than overly transactional.',
+        'A website that feels less like a booking system and more like an invitation into the studio.',
+      ],
+      screens: [
+        { src: TattooHomepageDesktop, alt: 'Desktop homepage prototype for Dancy & Daughters', caption: 'Homepage — desktop' },
+        { src: TattooHomepageMobileTop, alt: 'Mobile homepage prototype — hero, gallery, artists and FAQ', caption: 'Homepage — mobile' },
+        { src: TattooHomepageMobileLower, alt: 'Mobile homepage prototype — visit, hours and contact', caption: 'Homepage — mobile, lower' },
+        { src: TattooComponents, alt: 'UI components, navigation and gallery pieces', caption: 'Components' },
+        { src: TattooExterior, alt: 'Designed exterior photograph with studio lettering', caption: 'Exterior' },
+        { src: TattooInterior, alt: 'Designed interior photograph with studio lettering', caption: 'Interior' },
+        { src: TattooMaya, alt: 'Designed photograph of tattooing with studio lettering', caption: 'In the studio' },
+      ],
+    },
+  ],
+}
+
+export const caseStudies = {
+  'hidden-holds': hiddenHoldsCase,
+  'tattoo-shop': tattooShopCase,
 }
 

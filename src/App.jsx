@@ -14,6 +14,7 @@ import DigitalArt from './components/DigitalArt.jsx'
 export default function App() {
   const [page, setPage] = useState('home')
   const [activeProject, setActiveProject] = useState(null)
+  const [caseId, setCaseId] = useState('hidden-holds')
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -47,7 +48,7 @@ export default function App() {
       />
 
       {page === 'case-study' ? (
-        <CaseStudy onBack={handleBack} />
+        <CaseStudy projectId={caseId} onBack={handleBack} />
       ) : page === 'digital-art' ? (
         <DigitalArt onBack={handleBack} />
       ) : (
@@ -67,6 +68,7 @@ export default function App() {
           onClose={() => setActiveProject(null)}
           onExplore={() => {
             const nextPage = activeProject === 'digital-art' ? 'digital-art' : 'case-study'
+            if (nextPage === 'case-study') setCaseId(activeProject)
             setActiveProject(null)
             setPage(nextPage)
             window.scrollTo(0, 0)

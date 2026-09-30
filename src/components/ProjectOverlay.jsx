@@ -64,6 +64,11 @@ export default function ProjectOverlay({ projectId, onClose, onExplore }) {
                   Visit live site
                 </a>
               )}
+              {project.figmaUrl && (
+                <a className="btn btn-ghost" href={project.figmaUrl} target="_blank" rel="noreferrer">
+                  Open Figma
+                </a>
+              )}
             </div>
           </div>
         </div>
